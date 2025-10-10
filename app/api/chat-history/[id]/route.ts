@@ -4,10 +4,11 @@ import { getAuthUser } from '@/lib/middleware'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = getAuthUser(request)
+    const { id } = await context.params;
     if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -17,7 +18,7 @@ export async function GET(
 
     const chatHistory = await prisma.chatHistory.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id
       },
       select: {
@@ -48,10 +49,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = getAuthUser(request)
+    const { id } = await context.params;
     if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -63,7 +65,7 @@ export async function PUT(
 
     const chatHistory = await prisma.chatHistory.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: user.id
       }
     })
@@ -76,7 +78,7 @@ export async function PUT(
     }
 
     const updatedChatHistory = await prisma.chatHistory.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(title && { title }),
         ...(messages && { messages })
@@ -106,10 +108,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = getAuthUser(request)
+    const { id } = await context.params;
     if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -119,7 +122,7 @@ export async function DELETE(
 
     const chatHistory = await prisma.chatHistory.findFirst({
       where: {
-        id: params.id,
+        id,
         userId: user.id
       }
     })
@@ -132,7 +135,7 @@ export async function DELETE(
     }
 
     await prisma.chatHistory.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({
