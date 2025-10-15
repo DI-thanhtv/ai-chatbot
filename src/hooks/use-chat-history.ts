@@ -1,6 +1,6 @@
 "use client";
 
-import { useStore } from '@/src/stores/use-store';
+import { useStore } from '@/stores/use-store';
 import { useParams, useRouter } from 'next/navigation';
 import { generateId } from 'ai';
 

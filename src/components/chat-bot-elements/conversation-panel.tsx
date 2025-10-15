@@ -5,22 +5,22 @@ import {
   ConversationContent,
   ConversationEmptyState,
   ConversationScrollButton,
-} from "@/src/components/ai-elements/conversation"
-import { Message, MessageContent } from '@/src/components/ai-elements/message';
+} from "@/components/ai-elements/conversation"
+import { Message, MessageContent } from '@/components/ai-elements/message';
 import {
   PromptInput,
   PromptInputTextarea,
   PromptInputSubmit,
   PromptInputMessage,
-} from '@/src/components/ai-elements/prompt-input';
+} from '@/components/ai-elements/prompt-input';
 import { MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useChat } from '@ai-sdk/react';
-import { Response } from '@/src/components/ai-elements/response';
+import { Response } from '@/components/ai-elements/response';
 import { DefaultChatTransport } from "ai";
-import { useChatHistory } from '@/src/hooks/useChatHistory';
-import AuthModal from '@/src/components/auth/AuthModal';
-import { useStore } from '@/src/stores/use-store';
+import { useChatHistory } from '@/hooks/use-chat-history';
+import AuthModal from '@/components/auth/auth-modal';
+import { useStore } from '@/stores/use-store';
 import { Button } from "@/components/ui/button";
 
 interface ConversationPanelProps {

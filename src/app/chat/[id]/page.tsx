@@ -1,6 +1,6 @@
 "use client";
 
-import ConversationPanel from "@/src/components/chat-bot-elements/ConversationPanel";
+import ConversationPanel from "@/components/chat-bot-elements/conversation-panel";
 import { useParams } from "next/navigation";
 
 function ChatPage() {

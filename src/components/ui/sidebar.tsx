@@ -1,6 +1,6 @@
 "use client";
 
-import { useStore } from "@/src/stores/use-store";
+import { useStore } from "@/stores/use-store";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
