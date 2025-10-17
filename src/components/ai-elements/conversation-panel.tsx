@@ -22,6 +22,8 @@ import { useChatHistory } from '@/hooks/use-chat-history';
 import AuthModal from '@/components/auth/auth-modal';
 import { useStore } from '@/stores/use-store';
 import { Button } from "@/components/ui/button";
+import { Weather, WeatherProps } from "../ui/weather";
+import { ListTable } from "../ui/table";
 
 interface ConversationPanelProps {
   chatId?: string;
@@ -30,12 +32,11 @@ interface ConversationPanelProps {
 const ConversationPanel = ({ chatId }: ConversationPanelProps) => {
   const [input, setInput] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [initialMessages, setInitialMessages] = useState<any[]>([]);
 
   const {
     currentUser,
     loadChat,
-    saveChat,
+    saveChat: _,
     createNewChat
   } = useChatHistory();
 
@@ -127,12 +128,11 @@ const ConversationPanel = ({ chatId }: ConversationPanelProps) => {
                 />
               ) : (
                 messages.map((message) => {
-                  console.log("🚀 ~ message:", message)
-
                   return (
                     <Message from={message.role} key={message.id}>
                       <MessageContent>
                         {message?.parts?.map((part, i) => {
+
                           switch (part.type) {
                             case 'text':
                               return (
@@ -140,6 +140,46 @@ const ConversationPanel = ({ chatId }: ConversationPanelProps) => {
                                   {part.text}
                                 </Response>
                               );
+                            case 'tool-displayWeather':
+                              switch (part.state) {
+                                case 'input-available':
+                                  return <div key={i}>Loading weather...</div>;
+                                case 'output-available':
+                                  return (
+                                    <div key={i}>
+                                      <Weather {...part.output as WeatherProps} />
+                                    </div>
+                                  );
+                                case 'output-error':
+                                  return <div key={i}>Error: {part.errorText}</div>;
+                                default:
+                                  return null;
+                              }
+                            case 'tool-textToSql':
+                              switch (part.state) {
+                                case 'input-available':
+                                  return <div key={i}>Loading CSDL...</div>;
+                                case 'output-available':
+                                  try {
+                                    const outputData = typeof part.output === 'string' ? JSON.parse(part.output) : part.output;
+                                    if (outputData.type === "table" && outputData.data && outputData.data.columns) {
+                                      return (
+                                        <ListTable key={i} data={outputData.data} />
+                                      );
+                                    }
+
+                                    if (outputData.type === "raw") {
+                                      return null;
+                                    }
+                                  } catch (error) {
+                                    console.error("Error parsing tool output:", error);
+                                    return <div key={i}>Error parsing data: {String(part.output)}</div>;
+                                  }
+                                case 'output-error':
+                                  return <div key={i}>Error: {part.errorText}</div>;
+                                default:
+                                  return null;
+                              }
                             default:
                               return null;
                           }

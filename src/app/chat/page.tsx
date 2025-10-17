@@ -1,6 +1,6 @@
 "use client"
 
-import ConversationPanel from "@/components/chat-bot-elements/conversation-panel"
+import ConversationPanel from "@/components/ai-elements/conversation-panel"
 
 function Page() {
   return <ConversationPanel />

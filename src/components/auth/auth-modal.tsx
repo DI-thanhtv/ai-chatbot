@@ -50,7 +50,6 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     } else {
       success = await register(email, password, name);
     }
-    console.log("🚀 ~ handleSubmit ~ success:", success)
 
     if (success) {
       if (!isLogin) {
