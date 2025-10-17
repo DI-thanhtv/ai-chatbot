@@ -1,4 +1,4 @@
-import { getSchemaDatabase } from '@/lib/db';
+import { getSchemaDatabase } from '@/lib/prisma-adapters';
 import { listTableSchema } from '@/schemas';
 import { chatModel } from '@/lib/ai';
 import { tool as createTool, generateObject } from 'ai';
